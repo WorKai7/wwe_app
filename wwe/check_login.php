@@ -12,7 +12,7 @@ if (isset($_POST['connect'])) {
     $uname = $_POST['uname'];
     $psw = $_POST['psw'];
     $user = myAuthClass::authenticate($uname, $psw);
-    if ($user["rowid"] > 0) // Ajuster le test en fonction des besoins
+    if ($user["id"] > 0) // Ajuster le test en fonction des besoins
     {
         $_SESSION['mesgs']['confirm'][] = 'Connexion réussie ' . $user['username'];
         $_SESSION['login'] = $user['username'];

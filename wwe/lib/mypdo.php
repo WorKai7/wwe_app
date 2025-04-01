@@ -22,7 +22,7 @@ if (
 }
 
 // ouverture de la connexion
-$dsn = "mysql:host=$db_host;port=$db_port;dbname=$db_name";
+$dsn = "pgsql:host=$db_host;port=$db_port;dbname=$db_name";
 $db_options = array();
 
 try {
