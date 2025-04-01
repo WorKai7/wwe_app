@@ -1,0 +1,16 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "API du site de catch",
+  "author": "FC Catch",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --exec src/index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9",
+    "typescript": "^5.3.2"
+  },
+  "license": "ISC"
+}
