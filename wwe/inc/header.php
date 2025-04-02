@@ -10,7 +10,7 @@
 
     <style>
         .banner {
-            background-image: url("img/banner.jpeg");
+            background-image: url("img/header_banner.jpeg");
         }
 
         nav {
