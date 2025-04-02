@@ -3,6 +3,7 @@ import prisma from "../client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+
 export const login = async (req: Request, res: Response): Promise<void> => {
 
     try {

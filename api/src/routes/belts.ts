@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import prisma from "../client";
 
+
 export const getAllBelts = async (req: Request, res: Response): Promise<void> => {
 
     try {

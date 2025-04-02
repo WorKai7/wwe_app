@@ -1,16 +1,17 @@
 import { Request, Response } from "express";
 import prisma from "../client";
 
-export const getAllBelts = async (req: Request, res: Response): Promise<void> => {
+
+export const getAllCards = async (req: Request, res: Response): Promise<void> => {
 
     try {
 
-        const belts = await prisma.belt.findMany();
-        res.status(200).json(belts);
+        const cards = await prisma.card.findMany();
+        res.status(200).json(cards);
 
     } catch (error) {
 
-        console.error("Erreur getAllBelts :", error);
+        console.error("Erreur getAllCards :", error);
         res.status(500).json({ error: "Erreur interne, veuillez réessayer plus tard" });
 
     }
@@ -18,34 +19,34 @@ export const getAllBelts = async (req: Request, res: Response): Promise<void> =>
 };
 
 
-export const getBeltById = async (req: Request, res: Response): Promise<void> => {
+export const getCardById = async (req: Request, res: Response): Promise<void> => {
 
     try {
 
         const { id } = req.params;
-        const beltId = Number(id);
+        const cardId = Number(id);
 
-        if (isNaN(beltId)) {
+        if (isNaN(cardId)) {
 
             res.status(400).json({ error: "L'id fourni n'est pas valide" });
             return;
 
         }
 
-        const belt = await prisma.belt.findUnique({ where: { id: beltId } });
+        const card = await prisma.card.findUnique({ where: { id: cardId } });
 
-        if (!belt) {
+        if (!card) {
 
-            res.status(404).json({ error: "Cette belt n'existe pas" });
+            res.status(404).json({ error: "Cette card n'existe pas" });
             return;
 
         }
 
-        res.status(200).json(belt);
+        res.status(200).json(card);
 
     } catch (error) {
 
-        console.error("Erreur getBeltById :", error);
+        console.error("Erreur getCardById :", error);
         res.status(500).json({ error: "Erreur interne, veuillez réessayer plus tard" });
 
     }
