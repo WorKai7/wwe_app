@@ -48,10 +48,6 @@ switch ($request) {
         include __DIR__.'/views/analysis.php';
         break;
     
-    case '/profile':
-        include __DIR__.'/views/profile.php';
-        break;
-    
     case '/register':
         include __DIR__.'/controllers/register.php';
         include __DIR__.'/views/register.php';
@@ -59,6 +55,10 @@ switch ($request) {
 
     case '/login':
         include __DIR__.'/views/login.php';
+        break;
+    
+    case '/data':
+        include __DIR__.'/views/data.php';
         break;
     
     default:

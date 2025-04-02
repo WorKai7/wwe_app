@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="vendor/twbs/bootstrap/dist/css/bootstrap.min.css">
     <script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <title>WWW - <?= $title ?></title>
+    <title>WWE - <?= $title ?></title>
 
     <style>
         .banner {
@@ -62,7 +62,7 @@
         }
 
         ul {
-            gap: 200px;
+            gap: 150px;
             display: flex;
             align-items: center;
         }
@@ -95,8 +95,11 @@
 
             <div>
                 <ul class="nav">
-                <li class="nav-item">
+                    <li class="nav-item">
                         <a class="nav-link" href="/wwe">ACCUEIL</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/wwe/data">DONNÉES</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/wwe/stats">STATISTIQUES</a>

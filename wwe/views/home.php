@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="vendor/twbs/bootstrap/dist/css/bootstrap.min.css">
     <script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <title>WWW - Accueil</title>
+    <title>WWE - Accueil</title>
 
     <style>
         .banner_container {
@@ -87,7 +87,7 @@
         }
 
         ul {
-            gap: 200px;
+            gap: 150px;
             display: flex;
             align-items: center;
         }
@@ -111,7 +111,7 @@
         .pres_div {
             width: 35%;
             margin-left: 8%;
-            margin-bottom: 13%;
+            margin-bottom: 9%;
         }
 
         .presentation {
@@ -134,6 +134,9 @@
                     <ul class="nav">
                         <li class="nav-item">
                             <a class="nav-link" href="/wwe">ACCUEIL</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/wwe/data">DONNÉES</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/wwe/stats">STATISTIQUES</a>
@@ -170,7 +173,19 @@
             </nav>
             
             <div class="pres_div">
-                <p class="presentation">Petit texte pour dire ouais lachin truc bidule lorem ipsum va te faire foutre Yanis et surtout Fournieeeeeerrr or Behaniniiiii surtout surtout et surtout je suis gay</p>
+                <p class="presentation">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Nullam in turpis ut augue eleifend cursus ac nec odio.
+                    Aenean efficitur mi nisi, ut suscipit nunc gravida sed.
+                    Morbi congue, massa a ullamcorper mattis, justo purus elementum nibh,
+                    et tempor ligula erat sed ante. Vivamus sed dictum nibh.
+                    Integer aliquet lectus sit amet iaculis fermentum.
+                    Phasellus laoreet maximus vestibulum. Nulla eget rhoncus justo.
+                    Maecenas in ligula erat. Morbi blandit arcu at turpis bibendum interdum eget nec odio.
+                    Proin posuere ac ante non pellentesque. Vestibulum lectus massa,
+                    feugiat sed malesuada in, hendrerit at mi. Aenean nisi turpis,
+                    pellentesque vitae interdum eget, rhoncus ut arcu.
+                </p>
             </div>
         </div>
     </div>
