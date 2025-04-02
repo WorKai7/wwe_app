@@ -157,7 +157,6 @@
                                     <li><h6 class="dropdown-header">Connecté en tant que</h6></li>
                                     <li><span class="dropdown-item-text"><?= $_SESSION['user']['username'] ?? 'Utilisateur' ?></span></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profil</a></li>
                                     <li>
                                         <a class="dropdown-item text-danger" href="delog.php">
                                             <i class="fas fa-sign-out-alt me-2"></i>Déconnexion

@@ -33,12 +33,11 @@
             font-size: 20px;
             font-weight: bold;
             text-decoration: none;
-            position: relative; /* Nécessaire pour positionner ::before */
-            padding-bottom: 5px; /* Espace pour l'animation */
-            display: inline-block; /* Pour contenir l'effet */
+            position: relative;
+            padding-bottom: 5px;
+            display: inline-block;
         }
 
-        /* Animation de soulignement */
         .nav-link::before {
             content: "";
             position: absolute;
@@ -71,7 +70,7 @@
         .dropdown-toggle-img {
             cursor: pointer;
             transition: transform 0.3s ease;
-            border-radius: 50%; /* Pour un effet cercle */
+            border-radius: 50%;
             border: 2px solid transparent;
         }
 
@@ -121,7 +120,6 @@
                                 <li><h6 class="dropdown-header">Connecté en tant que</h6></li>
                                 <li><span class="dropdown-item-text"><?= $_SESSION['user']['username'] ?? 'Utilisateur' ?></span></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profil</a></li>
                                 <li>
                                     <a class="dropdown-item text-danger" href="delog.php">
                                         <i class="fas fa-sign-out-alt me-2"></i>Déconnexion

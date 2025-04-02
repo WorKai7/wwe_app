@@ -1,5 +1,7 @@
 <?php
 session_start();
+$_SESSION['mesgs']['confirm'] = $_SESSION['mesgs']['confirm'] ?? [];
+$_SESSION['mesgs']['errors'] = $_SESSION['mesgs']['errors'] ?? [];
 // Autoloader
 require_once(dirname(__FILE__) . '/../vendor/autoload.php');
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__FILE__) . '/../');

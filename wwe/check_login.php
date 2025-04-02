@@ -1,7 +1,5 @@
 <?php
 session_start();
-// Permet d'activer l'affichage des erreurs
-error_reporting(E_ALL & ~E_WARNING & ~E_NOTICE);
 require_once(dirname(__FILE__) . '/lib/myproject.lib.php');
 if (GETPOST('debug') == true) {
     ini_set('display_errors', 1);
