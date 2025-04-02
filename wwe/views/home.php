@@ -9,8 +9,32 @@
     <title>WWW - Accueil</title>
 
     <style>
+        .banner_container {
+            position: relative;
+        }
+
         .banner {
             background-image: url("img/banner.jpeg");
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            z-index: 1;
+        }
+
+        .overflow-image {
+            position: absolute;
+            height: 45vh;
+            right: 10%;
+            bottom: 10vh;
+            z-index: 2;
+            transition: all 0.3s ease;
+            border-radius: 20px;
+        }
+
+        .overflow-image:hover {
+            transform: scale(1.01);
         }
 
         nav {
@@ -83,56 +107,74 @@
         .dropdown-menu {
             min-width: 150px;
         }
+
+        .pres_div {
+            width: 35%;
+            margin-left: 8%;
+            margin-bottom: 13%;
+        }
+
+        .presentation {
+            color: white;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-    <div class="banner">
-        <nav>
-            <div>
-                <a href="/wwe">
-                    <img src="img/logo.png" alt="Logo" id="logo">
-                </a>
-            </div>
+    <div class="banner_container">
+        <div class="banner">
+            <nav>
+                <div>
+                    <a href="/wwe">
+                        <img src="img/logo.png" alt="Logo" id="logo">
+                    </a>
+                </div>
 
-            <div>
-                <ul class="nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/wwe">ACCUEIL</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/wwe/stats">STATISTIQUES</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/wwe/analysis">ANALYSE</a>
-                    </li>
-                    <li class="nav-item">
-                        <div class="dropdown">
-                            <!-- L'image comme bouton dropdown -->
-                            <img src="img/acc.png"
-                                id="acc"
-                                class="dropdown-toggle-img"
-                                height="50"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                                alt="Menu utilisateur">
+                <div>
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/wwe">ACCUEIL</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/wwe/stats">STATISTIQUES</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/wwe/analysis">ANALYSE</a>
+                        </li>
+                        <li class="nav-item">
+                            <div class="dropdown">
+                                <!-- L'image comme bouton dropdown -->
+                                <img src="img/acc.png"
+                                    id="acc"
+                                    class="dropdown-toggle-img"
+                                    height="50"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                    alt="Menu utilisateur">
 
-                            <!-- Menu dropdown -->
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><h6 class="dropdown-header">Connecté en tant que</h6></li>
-                                <li><span class="dropdown-item-text"><?= $_SESSION['user']['username'] ?? 'Utilisateur' ?></span></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profil</a></li>
-                                <li>
-                                    <a class="dropdown-item text-danger" href="delog.php">
-                                        <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
+                                <!-- Menu dropdown -->
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><h6 class="dropdown-header">Connecté en tant que</h6></li>
+                                    <li><span class="dropdown-item-text"><?= $_SESSION['user']['username'] ?? 'Utilisateur' ?></span></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profil</a></li>
+                                    <li>
+                                        <a class="dropdown-item text-danger" href="delog.php">
+                                            <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            
+            <div class="pres_div">
+                <p class="presentation">Petit texte pour dire ouais lachin truc bidule lorem ipsum va te faire foutre Yanis et surtout Fournieeeeeerrr or Behaniniiiii surtout surtout et surtout je suis gay</p>
             </div>
-        </nav>
+        </div>
     </div>
+    <img src="img/home.jpeg" class="overflow-image">
 </body>
 </html>
