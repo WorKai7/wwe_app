@@ -1,0 +1,95 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Promotion {
+    id   Int     @id @default(autoincrement())
+    name String? @db.Text
+
+    @@map("Promotions")
+}
+
+model Table {
+    id   Int     @id @default(autoincrement())
+    html String? @db.Text
+    url  String? @db.Text
+
+    @@map("Tables")
+}
+
+model Card {
+    id           Int       @id @default(autoincrement())
+    table_id     Int?
+    location_id  Int?
+    promotion_id Int?
+    event_date   DateTime?
+    event_id     Int?
+    url          String?   @db.Text
+    info_html    String?   @db.Text
+    match_html   String?   @db.Text
+
+    @@map("Cards")
+}
+
+model Location {
+    id   Int     @id @default(autoincrement())
+    name String? @db.Text
+
+    @@map("Locations")
+}
+
+model Event {
+    id   Int     @id @default(autoincrement())
+    name String? @db.Text
+
+    @@map("Events")
+}
+
+model Match {
+    id           Int     @id @default(autoincrement())
+    card_id      Int?
+    winner_id    String?
+    win_type     String?
+    loser_id     String?
+    match_type_id String?
+    duration     String?
+    title_id     String?
+    title_change Int?
+
+    @@map("Matches")
+}
+
+model Belt {
+    id   Int     @id @default(autoincrement())
+    name String? @db.Text
+
+    @@map("Belts")
+}
+
+model Wrestler {
+    id   Int     @id @default(autoincrement())
+    name String? @db.Text
+
+    @@map("Wrestlers")
+}
+
+model MatchType {
+    id   Int     @id @default(autoincrement())
+    name String? @db.Text
+
+    @@map("Match_Types")
+}
+
+model User {
+    id       Int     @id @default(autoincrement())
+    username String @db.VarChar(255) @unique
+    password String @db.VarChar(255)
+
+    @@map("users")
+}
+
