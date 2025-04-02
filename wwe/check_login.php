@@ -22,4 +22,4 @@ if (isset($_POST['connect'])) {
         $_SESSION['mesgs']['errors'][] = 'Identification impossible';
     }
 }
-header('Location:index.php');
+header('Location: /wwe/');
