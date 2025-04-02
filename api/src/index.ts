@@ -1,5 +1,8 @@
 import express from "express";
 
+import YAML from 'yamljs';
+import swaggerUi from 'swagger-ui-express';
+
 import { logger } from "./middleware/logger";
 import { verifyJWT } from "./middleware/auth";
 
@@ -15,15 +18,18 @@ import { getAllPromotions, getPromotionById } from "./routes/promotions";
 import { getAllTables, getTableById } from "./routes/tables";
 import { getAllWrestlers, getWrestlerById } from "./routes/wrestlers";
 
-
+// INIT
 const PORT = process.env.API_PORT || undefined;
 if (!PORT) {
     console.error("ERROR: Port non défini");
     process.exit(1);
 }
-
 export const app = express();
 app.use(express.json());
+
+// SWAGGER
+const swaggerDocument = YAML.load("./src/swagger.yaml");
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // MIDDLEWARES
 app.use(logger);

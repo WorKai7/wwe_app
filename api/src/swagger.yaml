@@ -1,0 +1,553 @@
+openapi: 3.0.0
+info:
+  title: API de WWE App
+  version: "1.0.0"
+  description: API du site de catch
+servers:
+  - url: http://localhost:3000
+paths:
+  /hello:
+    get:
+      summary: Retourne un message de bienvenue
+      description: Retourne un objet avec un message "Hello World !"
+      responses:
+        "200":
+          description: Message de bienvenue
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Hello World !"
+  /auth/login:
+    post:
+      summary: Authentification d'un utilisateur
+      description: Valide les identifiants et retourne un token JWT.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Token JWT retourné
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        "400":
+          description: Données invalides
+        "401":
+          description: Authentification échouée
+        "500":
+          description: Erreur interne
+  /auth/register:
+    post:
+      summary: Enregistrement d'un nouvel utilisateur
+      description: Crée un utilisateur avec les champs username et password.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "201":
+          description: Utilisateur créé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  username:
+                    type: string
+        "400":
+          description: Données invalides
+        "500":
+          description: Erreur interne
+  /belts:
+    get:
+      summary: Récupérer toutes les belts
+      responses:
+        "200":
+          description: Liste des belts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Belt"
+        "500":
+          description: Erreur interne
+  /belts/{id}:
+    get:
+      summary: Récupérer une belt par son ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID de la belt
+      responses:
+        "200":
+          description: Détails de la belt
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Belt"
+        "400":
+          description: ID invalide
+        "404":
+          description: Belt non trouvée
+        "500":
+          description: Erreur interne
+  /cards:
+    get:
+      summary: Récupérer toutes les cards
+      responses:
+        "200":
+          description: Liste des cards
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Card"
+        "500":
+          description: Erreur interne
+  /cards/{id}:
+    get:
+      summary: Récupérer une card par son ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID de la card
+      responses:
+        "200":
+          description: Détails de la card
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Card"
+        "400":
+          description: ID invalide
+        "404":
+          description: Card non trouvée
+        "500":
+          description: Erreur interne
+  /events:
+    get:
+      summary: Récupérer tous les events
+      responses:
+        "200":
+          description: Liste des events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Event"
+        "500":
+          description: Erreur interne
+  /events/{id}:
+    get:
+      summary: Récupérer un event par son ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID de l'event
+      responses:
+        "200":
+          description: Détails de l'event
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+        "400":
+          description: ID invalide
+        "404":
+          description: Event non trouvé
+        "500":
+          description: Erreur interne
+  /locations:
+    get:
+      summary: Récupérer toutes les locations
+      responses:
+        "200":
+          description: Liste des locations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Location"
+        "500":
+          description: Erreur interne
+  /locations/{id}:
+    get:
+      summary: Récupérer une location par son ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID de la location
+      responses:
+        "200":
+          description: Détails de la location
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Location"
+        "400":
+          description: ID invalide
+        "404":
+          description: Location non trouvée
+        "500":
+          description: Erreur interne
+  /matchTypes:
+    get:
+      summary: Récupérer tous les match types
+      responses:
+        "200":
+          description: Liste des match types
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MatchType"
+        "500":
+          description: Erreur interne
+  /matchTypes/{id}:
+    get:
+      summary: Récupérer un match type par son ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID du match type
+      responses:
+        "200":
+          description: Détails du match type
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MatchType"
+        "400":
+          description: ID invalide
+        "404":
+          description: Match type non trouvé
+        "500":
+          description: Erreur interne
+  /matches:
+    get:
+      summary: Récupérer tous les matches
+      responses:
+        "200":
+          description: Liste des matches
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Match"
+        "500":
+          description: Erreur interne
+  /matches/{id}:
+    get:
+      summary: Récupérer un match par son ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID du match
+      responses:
+        "200":
+          description: Détails du match
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Match"
+        "400":
+          description: ID invalide
+        "404":
+          description: Match non trouvé
+        "500":
+          description: Erreur interne
+  /promotions:
+    get:
+      summary: Récupérer toutes les promotions
+      responses:
+        "200":
+          description: Liste des promotions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Promotion"
+        "500":
+          description: Erreur interne
+  /promotions/{id}:
+    get:
+      summary: Récupérer une promotion par son ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID de la promotion
+      responses:
+        "200":
+          description: Détails de la promotion
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Promotion"
+        "400":
+          description: ID invalide
+        "404":
+          description: Promotion non trouvée
+        "500":
+          description: Erreur interne
+  /tables:
+    get:
+      summary: Récupérer toutes les tables
+      responses:
+        "200":
+          description: Liste des tables
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Table"
+        "500":
+          description: Erreur interne
+  /tables/{id}:
+    get:
+      summary: Récupérer une table par son ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID de la table
+      responses:
+        "200":
+          description: Détails de la table
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Table"
+        "400":
+          description: ID invalide
+        "404":
+          description: Table non trouvée
+        "500":
+          description: Erreur interne
+  /wrestlers:
+    get:
+      summary: Récupérer tous les wrestlers
+      responses:
+        "200":
+          description: Liste des wrestlers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Wrestler"
+        "500":
+          description: Erreur interne
+  /wrestlers/{id}:
+    get:
+      summary: Récupérer un wrestler par son ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID du wrestler
+      responses:
+        "200":
+          description: Détails du wrestler
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Wrestler"
+        "400":
+          description: ID invalide
+        "404":
+          description: Wrestler non trouvé
+        "500":
+          description: Erreur interne
+components:
+  schemas:
+    Belt:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Championship Belt"
+    Card:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        table_id:
+          type: integer
+          example: 1
+        location_id:
+          type: integer
+          example: 1
+        promotion_id:
+          type: integer
+          example: 1
+        event_date:
+          type: string
+          format: date-time
+          example: "2025-04-01T23:46:45.000Z"
+        event_id:
+          type: integer
+          example: 1
+        url:
+          type: string
+          example: "http://example.com/card/1"
+        info_html:
+          type: string
+          example: "<div>Card info</div>"
+        match_html:
+          type: string
+          example: "<div>Match details</div>"
+    Event:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Summer Slam"
+    Location:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Madison Square Garden"
+    MatchType:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Singles Match"
+    Match:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        card_id:
+          type: integer
+          example: 1
+        winner_id:
+          type: string
+          example: "Wrestler A"
+        win_type:
+          type: string
+          example: "Pinfall"
+        loser_id:
+          type: string
+          example: "Wrestler B"
+        match_type_id:
+          type: string
+          example: "1"
+        duration:
+          type: string
+          example: "5:12"
+        title_id:
+          type: string
+          example: "Championship Title"
+        title_change:
+          type: integer
+          example: 0
+    Promotion:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Summer Promotion"
+    Table:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        html:
+          type: string
+          example: "<div>Table content</div>"
+        url:
+          type: string
+          example: "http://example.com/table/1"
+    Wrestler:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "John Cena"
