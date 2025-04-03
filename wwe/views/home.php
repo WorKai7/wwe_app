@@ -117,6 +117,7 @@
         .presentation {
             color: white;
             font-weight: bold;
+            text-align: justify;
         }
     </style>
 </head>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="vendor/twbs/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/wwe/vendor/twbs/bootstrap/dist/css/bootstrap.min.css">
     <title>Page not found</title>
 
     <style>
@@ -37,7 +37,7 @@
             <h1>404 : La page n'existe pas</h1>
             <a class="btn btn-primary" href="/wwe">Revenir à la page d'accueil</a>
         </div>
-        <img src="img/not_found.jpg" alt="Not found">
+        <img src="/wwe/img/not_found.jpg" alt="Not found">
     </div>
 </body>
 </html>
