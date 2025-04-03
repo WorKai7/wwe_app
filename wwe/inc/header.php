@@ -49,7 +49,7 @@
                                 <li><span class="dropdown-item-text"><?= $_SESSION['user']['username'] ?? 'Utilisateur' ?></span></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
-                                    <a class="dropdown-item text-danger" href="delog.php">
+                                    <a class="dropdown-item text-danger" href="/wwe/delog.php">
                                         <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
                                     </a>
                                 </li>

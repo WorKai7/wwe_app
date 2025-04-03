@@ -4,6 +4,20 @@ class Wrestler {
     private $name;
     private $pdo;
 
+    public static function fetchAllSingle($pdo) {
+        $sql = "SELECT * FROM wrestlers WHERE name NOT ILIKE '%&%' ORDER BY name";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        
+        $results = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $results[] = new Wrestler($pdo, $row);
+        }
+        
+        return $results;
+    }
+
     public static function fetchPaginated($pdo, $withDuo, $limit, $offset) {
         if ($withDuo) {
             $sql = "SELECT * FROM wrestlers ORDER BY id LIMIT :limit OFFSET :offset";
@@ -75,25 +89,41 @@ class Wrestler {
         }
     }
     
-    public static function countWithFilters($pdo, $criteres, $withDuo) {
-        $sql = $withDuo ? "SELECT COUNT(*) FROM wrestlers" : "SELECT COUNT(*) FROM wrestlers WHERE name NOT ILIKE '%&%'";
+    public static function countWithFilters($pdo, $filters) {
+        $sql = "SELECT COUNT(*) FROM matches WHERE 1=1";
         
-        if (!empty($criteres)) {
-            $sql .= $withDuo ? " WHERE " : " AND ";
-            foreach ($criteres as $critere => $valeur) {
-                if ($critere === 'name') {
-                    $sql .= "name ILIKE :name AND ";
-                } else {
-                    $sql .= "$critere = :$critere AND ";
-                }
-            }
-            $sql = substr($sql, 0, -5);
+        if (!empty($filters['winner_name'])) {
+            $sql .= " AND EXISTS (
+                SELECT 1 FROM wrestlers w 
+                WHERE w.id::text = matches.winner_id 
+                AND w.name ILIKE :winner_name
+            )";
         }
         
+        if (!empty($filters['match_type_name'])) {
+            $sql .= " AND EXISTS (
+                SELECT 1 FROM match_types t 
+                WHERE t.id = matches.match_type_id 
+                AND t.name ILIKE :match_type_name
+            )";
+        }
+        
+        if (!empty($filters['id'])) {
+            $sql .= " AND id = :id";
+        }
+    
         $stmt = $pdo->prepare($sql);
         
-        foreach ($criteres as $critere => $valeur) {
-            $stmt->bindValue(":$critere", $valeur);
+        if (!empty($filters['winner_name'])) {
+            $stmt->bindValue(':winner_name', '%'.$filters['winner_name'].'%');
+        }
+        
+        if (!empty($filters['match_type_name'])) {
+            $stmt->bindValue(':match_type_name', '%'.$filters['match_type_name'].'%');
+        }
+        
+        if (!empty($filters['id'])) {
+            $stmt->bindValue(':id', $filters['id'], PDO::PARAM_INT);
         }
         
         $stmt->execute();

@@ -59,7 +59,7 @@ include __DIR__.'/../../data.php';
                 
                 <div class="col-md-2 d-flex align-items-end gap-2">
                     <button type="submit" class="btn btn-primary flex-grow-1">Filtrer</button>
-                    <a href="?" class="btn btn-outline-secondary">×</a>
+                    <a href="?" class="btn btn-outline-secondary">x</a>
                 </div>
             </form>
         </div>

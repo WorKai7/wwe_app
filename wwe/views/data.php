@@ -42,13 +42,13 @@ include __DIR__.'/../inc/header.php';
                 <a class="nav-link text-dark" aria-current="page" href="/wwe/data/wrestlers/list">Catcheurs</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" aria-current="page" href="#">Matches</a>
+                <a class="nav-link text-dark" aria-current="page" href="/wwe/data/matches/list">Matches</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" aria-current="page" href="#">Évènements</a>
+                <a class="nav-link text-dark" aria-current="page" href="/wwe/data/events/list">Évènements</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" aria-current="page" href="#">Lieux</a>
+                <a class="nav-link text-dark" aria-current="page" href="/wwe/data/locations/list">Lieux</a>
             </li>
         </ul>
     </div>
