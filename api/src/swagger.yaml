@@ -1,553 +1,1224 @@
 openapi: 3.0.0
 info:
-  title: API de WWE App
-  version: "1.0.0"
-  description: API du site de catch
+  title: Wrestling Management API
+  description: API for managing wrestling promotions, events, wrestlers, and more
+  version: 1.0.0
 servers:
-  - url: http://localhost:3000
+  - url: http://localhost:${API_PORT}
+    description: Local development server
+  - url: https://api.wrestling-management.com
+    description: Production server
+
+tags:
+  - name: Authentication
+    description: Public authentication endpoints
+  - name: Belts
+    description: Championship belts management
+  - name: Cards
+    description: Event cards management
+  - name: Events
+    description: Wrestling events management
+  - name: Locations
+    description: Venues management
+  - name: Match Types
+    description: Match types management
+  - name: Matches
+    description: Matches management
+  - name: Promotions
+    description: Wrestling promotions management
+  - name: Tables
+    description: Tables management
+  - name: Wrestlers
+    description: Wrestlers management
+
 paths:
+  /public/login:
+    post:
+      tags: [Authentication]
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              required: [username, password]
+      responses:
+        200:
+          description: Successful login
+        401:
+          description: Unauthorized
+
+  /public/register:
+    post:
+      tags: [Authentication]
+      summary: User registration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                email:
+                  type: string
+              required: [username, password, email]
+      responses:
+        201:
+          description: User created
+        400:
+          description: Bad request
+
   /hello:
     get:
-      summary: Retourne un message de bienvenue
-      description: Retourne un objet avec un message "Hello World !"
+      tags: [Authentication]
+      summary: Simple hello endpoint
+      security:
+        - bearerAuth: []
       responses:
-        "200":
-          description: Message de bienvenue
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Hello World !"
-  /auth/login:
-    post:
-      summary: Authentification d'un utilisateur
-      description: Valide les identifiants et retourne un token JWT.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - username
-                - password
-              properties:
-                username:
-                  type: string
-                password:
-                  type: string
-      responses:
-        "200":
-          description: Token JWT retourné
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-        "400":
-          description: Données invalides
-        "401":
-          description: Authentification échouée
-        "500":
-          description: Erreur interne
-  /auth/register:
-    post:
-      summary: Enregistrement d'un nouvel utilisateur
-      description: Crée un utilisateur avec les champs username et password.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - username
-                - password
-              properties:
-                username:
-                  type: string
-                password:
-                  type: string
-      responses:
-        "201":
-          description: Utilisateur créé
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  username:
-                    type: string
-        "400":
-          description: Données invalides
-        "500":
-          description: Erreur interne
+        200:
+          description: Successful response
+
   /belts:
     get:
-      summary: Récupérer toutes les belts
+      tags: [Belts]
+      summary: Get all belts
+      security:
+        - bearerAuth: []
       responses:
-        "200":
-          description: Liste des belts
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Belt"
-        "500":
-          description: Erreur interne
+        200:
+          description: List of belts
+    post:
+      tags: [Belts]
+      summary: Create a new belt
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Belt'
+      responses:
+        201:
+          description: Belt created
+
   /belts/{id}:
     get:
-      summary: Récupérer une belt par son ID
+      tags: [Belts]
+      summary: Get a belt by ID
+      security:
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
-          schema:
-            type: integer
           required: true
-          description: ID de la belt
+          schema:
+            type: string
       responses:
-        "200":
-          description: Détails de la belt
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Belt"
-        "400":
-          description: ID invalide
-        "404":
-          description: Belt non trouvée
-        "500":
-          description: Erreur interne
+        200:
+          description: Belt details
+        404:
+          description: Belt not found
+    put:
+      tags: [Belts]
+      summary: Update a belt
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Belt'
+      responses:
+        200:
+          description: Belt updated
+        404:
+          description: Belt not found
+    delete:
+      tags: [Belts]
+      summary: Delete a belt
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: Belt deleted
+        404:
+          description: Belt not found
+
   /cards:
     get:
-      summary: Récupérer toutes les cards
+      tags: [Cards]
+      summary: Get all cards
+      security:
+        - bearerAuth: []
       responses:
-        "200":
-          description: Liste des cards
+        200:
+          description: List of cards
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Card"
-        "500":
-          description: Erreur interne
+                  $ref: '#/components/schemas/Card'
+        500:
+          description: Internal server error
+    post:
+      tags: [Cards]
+      summary: Create a new card
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Card'
+      responses:
+        201:
+          description: Card created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Card'
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+
   /cards/{id}:
     get:
-      summary: Récupérer une card par son ID
+      tags: [Cards]
+      summary: Get a card by ID
+      security:
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
+          required: true
           schema:
             type: integer
-          required: true
-          description: ID de la card
       responses:
-        "200":
-          description: Détails de la card
+        200:
+          description: Card details
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Card"
-        "400":
-          description: ID invalide
-        "404":
-          description: Card non trouvée
-        "500":
-          description: Erreur interne
+                $ref: '#/components/schemas/Card'
+        404:
+          description: Card not found
+        500:
+          description: Internal server error
+    put:
+      tags: [Cards]
+      summary: Update a card
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Card'
+      responses:
+        200:
+          description: Card updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Card'
+        400:
+          description: Bad request
+        404:
+          description: Card not found
+        500:
+          description: Internal server error
+    delete:
+      tags: [Cards]
+      summary: Delete a card
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: Card deleted
+        404:
+          description: Card not found
+        500:
+          description: Internal server error
+
   /events:
     get:
-      summary: Récupérer tous les events
+      tags: [Events]
+      summary: Get all events
+      security:
+        - bearerAuth: []
       responses:
-        "200":
-          description: Liste des events
+        200:
+          description: List of events
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Event"
-        "500":
-          description: Erreur interne
+                  $ref: '#/components/schemas/Event'
+        500:
+          description: Internal server error
+    post:
+      tags: [Events]
+      summary: Create a new event
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        201:
+          description: Event created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+
   /events/{id}:
     get:
-      summary: Récupérer un event par son ID
+      tags: [Events]
+      summary: Get an event by ID
+      security:
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
+          required: true
           schema:
             type: integer
-          required: true
-          description: ID de l'event
       responses:
-        "200":
-          description: Détails de l'event
+        200:
+          description: Event details
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Event"
-        "400":
-          description: ID invalide
-        "404":
-          description: Event non trouvé
-        "500":
-          description: Erreur interne
+                $ref: '#/components/schemas/Event'
+        404:
+          description: Event not found
+        500:
+          description: Internal server error
+    put:
+      tags: [Events]
+      summary: Update an event
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        200:
+          description: Event updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        400:
+          description: Bad request
+        404:
+          description: Event not found
+        500:
+          description: Internal server error
+    delete:
+      tags: [Events]
+      summary: Delete an event
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: Event deleted
+        404:
+          description: Event not found
+        500:
+          description: Internal server error
+
   /locations:
     get:
-      summary: Récupérer toutes les locations
+      tags: [Locations]
+      summary: Get all locations
+      security:
+        - bearerAuth: []
       responses:
-        "200":
-          description: Liste des locations
+        200:
+          description: List of locations
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Location"
-        "500":
-          description: Erreur interne
+                  $ref: '#/components/schemas/Location'
+        500:
+          description: Internal server error
+    post:
+      tags: [Locations]
+      summary: Create a new location
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+      responses:
+        201:
+          description: Location created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+
   /locations/{id}:
     get:
-      summary: Récupérer une location par son ID
+      tags: [Locations]
+      summary: Get a location by ID
+      security:
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
+          required: true
           schema:
             type: integer
-          required: true
-          description: ID de la location
       responses:
-        "200":
-          description: Détails de la location
+        200:
+          description: Location details
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Location"
-        "400":
-          description: ID invalide
-        "404":
-          description: Location non trouvée
-        "500":
-          description: Erreur interne
-  /matchTypes:
-    get:
-      summary: Récupérer tous les match types
-      responses:
-        "200":
-          description: Liste des match types
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/MatchType"
-        "500":
-          description: Erreur interne
-  /matchTypes/{id}:
-    get:
-      summary: Récupérer un match type par son ID
+                $ref: '#/components/schemas/Location'
+        404:
+          description: Location not found
+        500:
+          description: Internal server error
+    put:
+      tags: [Locations]
+      summary: Update a location
+      security:
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
+          required: true
           schema:
             type: integer
-          required: true
-          description: ID du match type
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
       responses:
-        "200":
-          description: Détails du match type
+        200:
+          description: Location updated
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MatchType"
-        "400":
-          description: ID invalide
-        "404":
-          description: Match type non trouvé
-        "500":
-          description: Erreur interne
+                $ref: '#/components/schemas/Location'
+        400:
+          description: Bad request
+        404:
+          description: Location not found
+        500:
+          description: Internal server error
+    delete:
+      tags: [Locations]
+      summary: Delete a location
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: Location deleted
+        404:
+          description: Location not found
+        500:
+          description: Internal server error
+
   /matches:
     get:
-      summary: Récupérer tous les matches
+      tags: [Matches]
+      summary: Get all matches
+      security:
+        - bearerAuth: []
       responses:
-        "200":
-          description: Liste des matches
+        200:
+          description: List of matches
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Match"
-        "500":
-          description: Erreur interne
+                  $ref: '#/components/schemas/Match'
+        500:
+          description: Internal server error
+    post:
+      tags: [Matches]
+      summary: Create a new match
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Match'
+      responses:
+        201:
+          description: Match created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Match'
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+
   /matches/{id}:
     get:
-      summary: Récupérer un match par son ID
+      tags: [Matches]
+      summary: Get a match by ID
+      security:
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
+          required: true
           schema:
             type: integer
-          required: true
-          description: ID du match
       responses:
-        "200":
-          description: Détails du match
+        200:
+          description: Match details
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Match"
-        "400":
-          description: ID invalide
-        "404":
-          description: Match non trouvé
-        "500":
-          description: Erreur interne
+                $ref: '#/components/schemas/Match'
+        404:
+          description: Match not found
+        500:
+          description: Internal server error
+    put:
+      tags: [Matches]
+      summary: Update a match
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Match'
+      responses:
+        200:
+          description: Match updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Match'
+        400:
+          description: Bad request
+        404:
+          description: Match not found
+        500:
+          description: Internal server error
+    delete:
+      tags: [Matches]
+      summary: Delete a match
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: Match deleted
+        404:
+          description: Match not found
+        500:
+          description: Internal server error
+
+  /matchTypes:
+    get:
+      tags: [Match Types]
+      summary: Get all match types
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: List of match types
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchType'
+        500:
+          description: Internal server error
+    post:
+      tags: [Match Types]
+      summary: Create a new match type
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatchType'
+      responses:
+        201:
+          description: Match type created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchType'
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+
+  /matchTypes/{id}:
+    get:
+      tags: [Match Types]
+      summary: Get a match type by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Match type details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchType'
+        404:
+          description: Match type not found
+        500:
+          description: Internal server error
+    put:
+      tags: [Match Types]
+      summary: Update a match type
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatchType'
+      responses:
+        200:
+          description: Match type updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchType'
+        400:
+          description: Bad request
+        404:
+          description: Match type not found
+        500:
+          description: Internal server error
+    delete:
+      tags: [Match Types]
+      summary: Delete a match type
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: Match type deleted
+        404:
+          description: Match type not found
+        500:
+          description: Internal server error
+
   /promotions:
     get:
-      summary: Récupérer toutes les promotions
+      tags: [Promotions]
+      summary: Get all promotions
+      security:
+        - bearerAuth: []
       responses:
-        "200":
-          description: Liste des promotions
+        200:
+          description: List of promotions
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Promotion"
-        "500":
-          description: Erreur interne
+                  $ref: '#/components/schemas/Promotion'
+        500:
+          description: Internal server error
+    post:
+      tags: [Promotions]
+      summary: Create a new promotion
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Promotion'
+      responses:
+        201:
+          description: Promotion created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Promotion'
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+
   /promotions/{id}:
     get:
-      summary: Récupérer une promotion par son ID
+      tags: [Promotions]
+      summary: Get a promotion by ID
+      security:
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
+          required: true
           schema:
             type: integer
-          required: true
-          description: ID de la promotion
       responses:
-        "200":
-          description: Détails de la promotion
+        200:
+          description: Promotion details
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Promotion"
-        "400":
-          description: ID invalide
-        "404":
-          description: Promotion non trouvée
-        "500":
-          description: Erreur interne
+                $ref: '#/components/schemas/Promotion'
+        404:
+          description: Promotion not found
+        500:
+          description: Internal server error
+    put:
+      tags: [Promotions]
+      summary: Update a promotion
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Promotion'
+      responses:
+        200:
+          description: Promotion updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Promotion'
+        400:
+          description: Bad request
+        404:
+          description: Promotion not found
+        500:
+          description: Internal server error
+    delete:
+      tags: [Promotions]
+      summary: Delete a promotion
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: Promotion deleted
+        404:
+          description: Promotion not found
+        500:
+          description: Internal server error
+
   /tables:
     get:
-      summary: Récupérer toutes les tables
+      tags: [Tables]
+      summary: Get all tables
+      security:
+        - bearerAuth: []
       responses:
-        "200":
-          description: Liste des tables
+        200:
+          description: List of tables
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Table"
-        "500":
-          description: Erreur interne
+                  $ref: '#/components/schemas/Table'
+        500:
+          description: Internal server error
+    post:
+      tags: [Tables]
+      summary: Create a new table
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Table'
+      responses:
+        201:
+          description: Table created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Table'
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+
   /tables/{id}:
     get:
-      summary: Récupérer une table par son ID
+      tags: [Tables]
+      summary: Get a table by ID
+      security:
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
+          required: true
           schema:
             type: integer
-          required: true
-          description: ID de la table
       responses:
-        "200":
-          description: Détails de la table
+        200:
+          description: Table details
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Table"
-        "400":
-          description: ID invalide
-        "404":
-          description: Table non trouvée
-        "500":
-          description: Erreur interne
+                $ref: '#/components/schemas/Table'
+        404:
+          description: Table not found
+        500:
+          description: Internal server error
+    put:
+      tags: [Tables]
+      summary: Update a table
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Table'
+      responses:
+        200:
+          description: Table updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Table'
+        400:
+          description: Bad request
+        404:
+          description: Table not found
+        500:
+          description: Internal server error
+    delete:
+      tags: [Tables]
+      summary: Delete a table
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: Table deleted
+        404:
+          description: Table not found
+        500:
+          description: Internal server error
+
   /wrestlers:
     get:
-      summary: Récupérer tous les wrestlers
+      tags: [Wrestlers]
+      summary: Get all wrestlers
+      security:
+        - bearerAuth: []
       responses:
-        "200":
-          description: Liste des wrestlers
+        200:
+          description: List of wrestlers
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Wrestler"
-        "500":
-          description: Erreur interne
-  /wrestlers/{id}:
-    get:
-      summary: Récupérer un wrestler par son ID
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: ID du wrestler
+                  $ref: '#/components/schemas/Wrestler'
+        500:
+          description: Internal server error
+    post:
+      tags: [Wrestlers]
+      summary: Create a new wrestler
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Wrestler'
       responses:
-        "200":
-          description: Détails du wrestler
+        201:
+          description: Wrestler created
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Wrestler"
-        "400":
-          description: ID invalide
-        "404":
-          description: Wrestler non trouvé
-        "500":
-          description: Erreur interne
+                $ref: '#/components/schemas/Wrestler'
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+
+  /wrestlers/{id}:
+    get:
+      tags: [Wrestlers]
+      summary: Get a wrestler by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Wrestler details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wrestler'
+        404:
+          description: Wrestler not found
+        500:
+          description: Internal server error
+    put:
+      tags: [Wrestlers]
+      summary: Update a wrestler
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Wrestler'
+      responses:
+        200:
+          description: Wrestler updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wrestler'
+        400:
+          description: Bad request
+        404:
+          description: Wrestler not found
+        500:
+          description: Internal server error
+    delete:
+      tags: [Wrestlers]
+      summary: Delete a wrestler
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: Wrestler deleted
+        404:
+          description: Wrestler not found
+        500:
+          description: Internal server error
+
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
   schemas:
     Belt:
       type: object
       properties:
-        id:
-          type: integer
-          example: 1
         name:
           type: string
-          example: "Championship Belt"
+        promotion:
+          type: string
+        currentHolder:
+          type: string
+        dateWon:
+          type: string
+          format: date
+      required: [name, promotion]
+
     Card:
       type: object
       properties:
         id:
           type: integer
-          example: 1
         table_id:
           type: integer
-          example: 1
+          nullable: true
         location_id:
           type: integer
-          example: 1
+          nullable: true
         promotion_id:
           type: integer
-          example: 1
+          nullable: true
         event_date:
           type: string
           format: date-time
-          example: "2025-04-01T23:46:45.000Z"
+          nullable: true
         event_id:
           type: integer
-          example: 1
+          nullable: true
         url:
           type: string
-          example: "http://example.com/card/1"
+          nullable: true
         info_html:
           type: string
-          example: "<div>Card info</div>"
+          nullable: true
         match_html:
           type: string
-          example: "<div>Match details</div>"
+          nullable: true
+      required: [id]
+
     Event:
       type: object
       properties:
         id:
           type: integer
-          example: 1
         name:
           type: string
-          example: "Summer Slam"
+        date:
+          type: string
+          format: date-time
+        location_id:
+          type: integer
+          nullable: true
+        promotion_id:
+          type: integer
+          nullable: true
+      required: [id, name, date]
+
     Location:
       type: object
       properties:
         id:
           type: integer
-          example: 1
         name:
           type: string
-          example: "Madison Square Garden"
+        city:
+          type: string
+        country:
+          type: string
+        capacity:
+          type: integer
+      required: [id, name, city, country]
+
     MatchType:
       type: object
       properties:
         id:
           type: integer
-          example: 1
         name:
           type: string
-          example: "Singles Match"
+          nullable: true
+      required: [id]
+
     Match:
       type: object
       properties:
         id:
           type: integer
-          example: 1
-        card_id:
+        eventId:
           type: integer
-          example: 1
-        winner_id:
+        matchType:
           type: string
-          example: "Wrestler A"
-        win_type:
+        participants:
+          type: array
+          items:
+            type: string
+        winner:
           type: string
-          example: "Pinfall"
-        loser_id:
-          type: string
-          example: "Wrestler B"
-        match_type_id:
-          type: string
-          example: "1"
+          nullable: true
         duration:
-          type: string
-          example: "5:12"
-        title_id:
-          type: string
-          example: "Championship Title"
-        title_change:
           type: integer
-          example: 0
+          nullable: true
+      required: [id, eventId, matchType, participants]
+
     Promotion:
       type: object
       properties:
         id:
           type: integer
-          example: 1
         name:
           type: string
-          example: "Summer Promotion"
+          nullable: true
+      required: [id]
+
     Table:
       type: object
       properties:
         id:
           type: integer
-          example: 1
         html:
           type: string
-          example: "<div>Table content</div>"
+          nullable: true
         url:
           type: string
-          example: "http://example.com/table/1"
+          nullable: true
+      required: [id]
+
     Wrestler:
       type: object
       properties:
         id:
           type: integer
-          example: 1
         name:
           type: string
-          example: "John Cena"
+        birthDate:
+          type: string
+          format: date
+        height:
+          type: integer
+        weight:
+          type: integer
+        promotion:
+          type: string
+      required: [id, name, birthDate]
