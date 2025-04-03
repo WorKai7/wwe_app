@@ -34,8 +34,8 @@ const publicRouter = express.Router();
 const apiRouter = express.Router();
 apiRouter.use(verifyJWT);
 
-app.use("/", publicRouter);
-app.use("/v1", apiRouter);
+app.use("/public", publicRouter);
+app.use("/", apiRouter);
 
 // SWAGGER
 const swaggerDocument = YAML.load("./src/swagger.yaml");
@@ -45,9 +45,13 @@ publicRouter.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 app.use(logger);
 
 // START
-app.listen(PORT, () => {
+export const server = app.listen(PORT, () => {
     console.log(`LOG: Demarrage du serveur sur le port ${PORT}`);
 });
+
+export function closeServer() {
+    server.close();
+}
 
 
 // -------------------- ROUTES -------------------- //
