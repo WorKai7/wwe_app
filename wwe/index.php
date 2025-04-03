@@ -34,34 +34,22 @@ if (!in_array($request, $routes_publiques)) {
     }
 }
 
-switch ($request) {
-    case '':
-    case '/':
-        include __DIR__.'/views/home.php';
-        break;
+if ($request == "" || $request == "/") {
+    include __DIR__.'/views/home.php';
+    exit();
+}
 
-    case '/stats':
-        include __DIR__.'/views/stats.php';
-        break;
+$controller = __DIR__."/controllers/$request.php";
+$view = __DIR__."/views/$request.php";
 
-    case '/analysis':
-        include __DIR__.'/views/analysis.php';
-        break;
-    
-    case '/register':
-        include __DIR__.'/controllers/register.php';
-        include __DIR__.'/views/register.php';
-        break;
+if (file_exists($controller)) {
+    include $controller;
+}
 
-    case '/login':
-        include __DIR__.'/views/login.php';
-        break;
-    
-    case '/data':
-        include __DIR__.'/views/data.php';
-        break;
-    
-    default:
-        include __DIR__.'/inc/notfound.php';
-        break;
+if (file_exists($view)) {
+    include $view;
+}
+
+if (!file_exists($view) && !file_exists($controller)) {
+    include __DIR__.'/inc/notfound.php';
 }
