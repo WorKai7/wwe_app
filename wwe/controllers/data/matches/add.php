@@ -12,6 +12,9 @@ try {
     // Récupérer tous les types de match (requête directe) Désolé monsieur j'ai plus le temps
     $matchTypesQuery = $db->query("SELECT id, name FROM match_types ORDER BY name");
     $matchTypes = $matchTypesQuery->fetchAll(PDO::FETCH_OBJ);
+
+    $promotionsQuery = $db->query("SELECT id, name FROM promotions ORDER BY name");
+    $promotions = $promotionsQuery->fetchAll(PDO::FETCH_OBJ);
     
 } catch (Exception $e) {
     $_SESSION["mesgs"]["errors"][] = "Erreur lors du chargement des données : " . $e->getMessage();

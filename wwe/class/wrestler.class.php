@@ -50,31 +50,41 @@ class Wrestler {
     }
 
     public static function findWithPagination($pdo, $criteres, $withDuo, $limit, $offset) {
+        // Base de la requête
         $sql = $withDuo ? "SELECT * FROM wrestlers" : "SELECT * FROM wrestlers WHERE name NOT ILIKE '%&%'";
         
+        $where = [];
+        $params = [];
+
+        // Construction des conditions
         if (!empty($criteres)) {
-            $sql .= $withDuo ? " WHERE " : " AND ";
             foreach ($criteres as $critere => $valeur) {
                 if ($critere === 'name') {
-                    $sql .= "name ILIKE :name AND ";
+                    $where[] = "name ILIKE :name";
+                    $params[':name'] = '%'.$valeur.'%';
                 } else {
-                    $sql .= "$critere = :$critere AND ";
+                    $where[] = "$critere = :$critere";
+                    $params[":$critere"] = $valeur;
                 }
             }
-            $sql = substr($sql, 0, -5);
+
+            // Ajout des conditions à la requête
+            $sql .= $withDuo ? " WHERE " : " AND ";
+            $sql .= implode(' AND ', $where);
         }
         
+        // Ajout de la pagination
         $sql .= " ORDER BY id LIMIT :limit OFFSET :offset";
-        
+        $params[':limit'] = $limit;
+        $params[':offset'] = $offset;
+
         try {
             $stmt = $pdo->prepare($sql);
             
-            // Bind des valeurs
-            foreach ($criteres as $critere => $valeur) {
-                $stmt->bindValue(":$critere", $valeur);
+            // Binding des paramètres
+            foreach ($params as $key => $value) {
+                $stmt->bindValue($key, $value);
             }
-            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
             
             $stmt->execute();
             $results = [];
@@ -89,41 +99,32 @@ class Wrestler {
         }
     }
     
-    public static function countWithFilters($pdo, $filters) {
-        $sql = "SELECT COUNT(*) FROM matches WHERE 1=1";
+    public static function countWithFilters($pdo, $criteres, $withDuo) {
+        $sql = $withDuo ? "SELECT COUNT(*) FROM wrestlers" : "SELECT COUNT(*) FROM wrestlers WHERE name NOT ILIKE '%&%'";
         
-        if (!empty($filters['winner_name'])) {
-            $sql .= " AND EXISTS (
-                SELECT 1 FROM wrestlers w 
-                WHERE w.id::text = matches.winner_id 
-                AND w.name ILIKE :winner_name
-            )";
+        $params = [];
+        $where = [];
+
+        if (!empty($criteres)) {
+            $sql .= $withDuo ? " WHERE " : " AND ";
+
+            foreach ($criteres as $critere => $valeur) {
+                if ($critere === 'name') {
+                    $where[] = "name ILIKE :name";
+                    $params[':name'] = '%'.$valeur.'%';
+                } else {
+                    $where[] = "$critere = :$critere";
+                    $params[":$critere"] = $valeur;
+                }
+            }
+
+            $sql .= implode(' AND ', $where);
         }
         
-        if (!empty($filters['match_type_name'])) {
-            $sql .= " AND EXISTS (
-                SELECT 1 FROM match_types t 
-                WHERE t.id = matches.match_type_id 
-                AND t.name ILIKE :match_type_name
-            )";
-        }
-        
-        if (!empty($filters['id'])) {
-            $sql .= " AND id = :id";
-        }
-    
         $stmt = $pdo->prepare($sql);
         
-        if (!empty($filters['winner_name'])) {
-            $stmt->bindValue(':winner_name', '%'.$filters['winner_name'].'%');
-        }
-        
-        if (!empty($filters['match_type_name'])) {
-            $stmt->bindValue(':match_type_name', '%'.$filters['match_type_name'].'%');
-        }
-        
-        if (!empty($filters['id'])) {
-            $stmt->bindValue(':id', $filters['id'], PDO::PARAM_INT);
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
         }
         
         $stmt->execute();

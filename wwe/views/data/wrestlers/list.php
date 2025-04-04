@@ -1,7 +1,7 @@
 <?php
 
 include __DIR__.'/../../data.php';
-
+include __DIR__.'/../../../inc/utils.php';
 
 ?>
 
@@ -26,7 +26,7 @@ include __DIR__.'/../../data.php';
 
 </style>
 
-<div class="main">    
+<div class="main">
     <div class="card mt-3" style="width: 75%;">
         <div class="card-header bg-light">
             <h5 class="mb-0">Filtrer les catcheurs</h5>
@@ -58,7 +58,7 @@ include __DIR__.'/../../data.php';
                 </div>
                 
                 <div class="col-md-2 d-flex align-items-end gap-2">
-                    <button type="submit" class="btn btn-primary flex-grow-1">Filtrer</button>
+                    <button type="submit" class="btn btn-primary flex-grow-1" name="confirm_envoyer">Filtrer</button>
                     <a href="?" class="btn btn-outline-secondary">x</a>
                 </div>
             </form>
@@ -71,7 +71,7 @@ include __DIR__.'/../../data.php';
         <ul class="pagination justify-content-center" style="gap: 0">
             <?php if ($currentPage > 2): ?>
                 <li class="page-item">
-                    <a class="page-link" href="?page=1&with_teams=<?= $withTeams ?>">1</a>
+                    <a class="page-link" href="<?= buildPaginatedUrl(1, $_GET) ?>">1</a>
                 </li>
                 <?php if ($currentPage > 3): ?>
                     <li class="page-item disabled">
@@ -86,7 +86,7 @@ include __DIR__.'/../../data.php';
             
             for ($i = $start; $i <= $end; $i++): ?>
                 <li class="page-item <?= $i === $currentPage ? 'active' : '' ?>">
-                    <a class="page-link" href="?page=<?= $i ?>&with_teams=<?= $withTeams ?>"><?= $i ?></a>
+                    <a class="page-link" href="<?= buildPaginatedUrl($i, $_GET) ?>"><?= $i ?></a>
                 </li>
             <?php endfor; ?>
             
@@ -97,7 +97,7 @@ include __DIR__.'/../../data.php';
                     </li>
                 <?php endif; ?>
                 <li class="page-item">
-                    <a class="page-link" href="?page=<?= $totalPages ?>&with_teams=<?= $withTeams ?>"><?= $totalPages ?></a>
+                    <a class="page-link" href="<?= buildPaginatedUrl($totalPages, $_GET) ?>"><?= $totalPages ?></a>
                 </li>
             <?php endif; ?>
         </ul>
@@ -118,16 +118,16 @@ include __DIR__.'/../../data.php';
                 <td><?= $wrestler->name ?></td>
                 <td>
                     <a href="/wwe/data/wrestlers/edit?id=<?= $wrestler->id ?>" class="btn btn-sm btn-secondary">Modifier</a>
-                    <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Supprimer</button>
-                    <div class="modal fade" id="deleteModal" aria-hidden="true" aria-labelledby="deleteModalLabel" tabindex="-1">
+                    <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $wrestler->id ?>">Supprimer </button>
+                    <div class="modal fade" id="deleteModal<?= $wrestler->id ?>" tabindex="-1">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5 text-center">Êtes-vous sûr de vouloir supprimer le catcheur n°<?= $wrestler->id ?></h1>
-                                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <h5 class="modal-title">Supprimer le catcheur #<?= $wrestler->id ?></h5>
+                                    <button class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
-                                <div class="modal-content p-3">
-                                    <p>Cette action est irréversible</p>
+                                <div class="modal-body">
+                                    <p>Êtes-vous sûr de vouloir supprimer ce catcheur ?</p>
                                 </div>
                                 <div class="modal-footer">
                                     <button class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
@@ -146,7 +146,7 @@ include __DIR__.'/../../data.php';
         <ul class="pagination justify-content-center" style="gap: 0">
             <?php if ($currentPage > 2): ?>
                 <li class="page-item">
-                    <a class="page-link" href="?page=1&with_teams=<?= $withTeams ?>">1</a>
+                    <a class="page-link" href="<?= buildPaginatedUrl(1, $_GET) ?>">1</a>
                 </li>
                 <?php if ($currentPage > 3): ?>
                     <li class="page-item disabled">
@@ -161,7 +161,7 @@ include __DIR__.'/../../data.php';
             
             for ($i = $start; $i <= $end; $i++): ?>
                 <li class="page-item <?= $i === $currentPage ? 'active' : '' ?>">
-                    <a class="page-link" href="?page=<?= $i ?>&with_teams=<?= $withTeams ?>"><?= $i ?></a>
+                    <a class="page-link" href="<?= buildPaginatedUrl($i, $_GET) ?>"><?= $i ?></a>
                 </li>
             <?php endfor; ?>
             
@@ -172,7 +172,7 @@ include __DIR__.'/../../data.php';
                     </li>
                 <?php endif; ?>
                 <li class="page-item">
-                    <a class="page-link" href="?page=<?= $totalPages ?>&with_teams=<?= $withTeams ?>"><?= $totalPages ?></a>
+                    <a class="page-link" href="<?= buildPaginatedUrl($totalPages, $_GET) ?>"><?= $totalPages ?></a>
                 </li>
             <?php endif; ?>
         </ul>

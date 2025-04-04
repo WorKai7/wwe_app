@@ -126,11 +126,7 @@ include __DIR__.'/../../../inc/utils.php';
                 <td><?= $match->duration ?></td>
                 <td>
                     <a href="/wwe/data/matches/edit?id=<?= $match->id ?>" class="btn btn-sm btn-secondary">Modifier</a>
-                    <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $match->id ?>">
-                        Supprimer
-                    </button>
-                    
-                    <!-- Modal de suppression -->
+                    <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $match->id ?>">Supprimer </button>
                     <div class="modal fade" id="deleteModal<?= $match->id ?>" tabindex="-1">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -154,7 +150,41 @@ include __DIR__.'/../../../inc/utils.php';
         </tbody>
     </table>
     
-    <!-- Pagination identique -->
+    <nav>
+        <ul class="pagination justify-content-center" style="gap: 0">
+            <?php if ($currentPage > 2): ?>
+                <li class="page-item">
+                    <a class="page-link" href="<?= buildPaginatedUrl(1, $_GET) ?>">1</a>
+                </li>
+                <?php if ($currentPage > 3): ?>
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                <?php endif; ?>
+            <?php endif; ?>
+
+            <?php
+            $start = max(1, $currentPage - 1);
+            $end = min($totalPages, $currentPage + 1);
+
+            for ($i = $start; $i <= $end; $i++): ?>
+                <li class="page-item <?= $i === $currentPage ? 'active' : '' ?>">
+                    <a class="page-link" href="<?= buildPaginatedUrl($i, $_GET) ?>"><?= $i ?></a>
+                </li>
+            <?php endfor; ?>
+
+            <?php if ($currentPage < $totalPages - 1): ?>
+                <?php if ($currentPage < $totalPages - 2): ?>
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                <?php endif; ?>
+                <li class="page-item">
+                    <a class="page-link" href="<?= buildPaginatedUrl($totalPages, $_GET) ?>"><?= $totalPages ?></a>
+                </li>
+            <?php endif; ?>
+        </ul>
+    </nav>
     
     <div class="text-center text-muted mt-2">
         Affichage des matches <?= ($offset + 1) ?> à <?= min($offset + $itemsPerPage, $totalMatches) ?> sur <?= $totalMatches ?>

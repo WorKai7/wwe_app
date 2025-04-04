@@ -22,8 +22,8 @@ class WrestlingMatch {
     public static function fetchPaginated($pdo, $limit, $offset) {
         $sql = "SELECT m.*, w.name as winner_name, w2.name as loser_name, t.name as match_type_name
                 FROM matches m
-                INNER JOIN wrestlers w ON m.winner_id = w.id::text
-                INNER JOIN wrestlers w2 ON m.loser_id = w2.id::text
+                INNER JOIN wrestlers w ON m.winner_id = w.id
+                INNER JOIN wrestlers w2 ON m.loser_id = w2.id
                 INNER JOIN match_types t ON m.match_type_id = t.id::text
                 WHERE m.id > :last_id
                 ORDER BY m.id LIMIT :limit";
@@ -63,7 +63,7 @@ class WrestlingMatch {
             
             // Filtre par nom de vainqueur
             if (!empty($filters['winner_name'])) {
-                $sql .= " INNER JOIN wrestlers w ON w.id::text = m.winner_id";
+                $sql .= " INNER JOIN wrestlers w ON w.id = m.winner_id";
                 $whereClauses[] = "w.name ILIKE :winner_name";
                 $params[':winner_name'] = '%' . $filters['winner_name'] . '%';
             }
@@ -99,8 +99,8 @@ class WrestlingMatch {
     public static function findWithPagination($pdo, $filters, $limit, $offset) {
         $sql = "SELECT m.*, w.name as winner_name, w2.name as loser_name, mt.name as match_type_name 
                 FROM matches m
-                INNER JOIN wrestlers w ON w.id::text = m.winner_id
-                INNER JOIN wrestlers w2 ON w2.id::text = m.loser_id
+                INNER JOIN wrestlers w ON w.id = m.winner_id
+                INNER JOIN wrestlers w2 ON w2.id = m.loser_id
                 INNER JOIN match_types mt ON mt.id::text = m.match_type_id";
         
         $params = [];
@@ -167,8 +167,8 @@ class WrestlingMatch {
     public static function findWithPaginationWithOffset($pdo, $filters, $limit, $offset) {
         $sql = "SELECT m.*, w.name as winner_name, w2.name as loser_name, mt.name as match_type_name 
                 FROM matches m
-                INNER JOIN wrestlers w ON w.id::text = m.winner_id
-                INNER JOIN wrestlers w2 ON w2.id::text = m.loser_id
+                INNER JOIN wrestlers w ON w.id = m.winner_id
+                INNER JOIN wrestlers w2 ON w2.id = m.loser_id
                 INNER JOIN match_types mt ON mt.id::text = m.match_type_id";
         
         $params = [];
