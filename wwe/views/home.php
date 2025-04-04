@@ -175,17 +175,19 @@
             
             <div class="pres_div">
                 <p class="presentation">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Nullam in turpis ut augue eleifend cursus ac nec odio.
-                    Aenean efficitur mi nisi, ut suscipit nunc gravida sed.
-                    Morbi congue, massa a ullamcorper mattis, justo purus elementum nibh,
-                    et tempor ligula erat sed ante. Vivamus sed dictum nibh.
-                    Integer aliquet lectus sit amet iaculis fermentum.
-                    Phasellus laoreet maximus vestibulum. Nulla eget rhoncus justo.
-                    Maecenas in ligula erat. Morbi blandit arcu at turpis bibendum interdum eget nec odio.
-                    Proin posuere ac ante non pellentesque. Vestibulum lectus massa,
-                    feugiat sed malesuada in, hendrerit at mi. Aenean nisi turpis,
-                    pellentesque vitae interdum eget, rhoncus ut arcu.
+                La World Wrestling Entertainment (WWE) est la plus grande entreprise de catch au monde, 
+                mêlant sport et divertissement spectaculaire depuis 1952. Diffusée dans plus de 145 pays, 
+                elle propose des shows emblématiques comme Raw, SmackDown et WrestleMania, avec des catcheurs 
+                légendaires et des intrigues captivantes. Après sa fusion avec l'UFC en 2023 sous le groupe 
+                TKO Holdings, et un accord majeur avec Netflix en 2024, la WWE continue de dominer le paysage 
+                du divertissement sportif malgré certaines controverses.
+
+                Ce site permet aux fans et aux analystes d’explorer des données détaillées sur les matchs,
+                les catcheurs et les statistiques historiques. Grâce à des outils d’analyse avancés, il est possible
+                de générer des prédictions pour les rencontres à venir, en se basant sur les performances passées, 
+                les rivalités en cours et d’autres facteurs clés. Que vous soyez un passionné souhaitant anticiper 
+                les résultats ou un expert cherchant à approfondir votre stratégie, cette plateforme offre des insights 
+                précieux pour mieux comprendre l’univers dynamique de la WWE.
                 </p>
             </div>
         </div>
