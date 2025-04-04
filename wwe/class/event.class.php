@@ -1,29 +1,11 @@
 <?php
-class Wrestler {
+class Event {
     private $id;
     private $name;
     private $pdo;
 
-    public static function fetchAllSingle($pdo) {
-        $sql = "SELECT * FROM wrestlers WHERE name NOT ILIKE '%&%' ORDER BY name";
-
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        
-        $results = [];
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $results[] = new Wrestler($pdo, $row);
-        }
-        
-        return $results;
-    }
-
-    public static function fetchPaginated($pdo, $withDuo, $limit, $offset) {
-        if ($withDuo) {
-            $sql = "SELECT * FROM wrestlers ORDER BY id LIMIT :limit OFFSET :offset";
-        } else {
-            $sql = "SELECT * FROM wrestlers WHERE name NOT ILIKE '%&%' ORDER BY id LIMIT :limit OFFSET :offset";
-        }
+    public static function fetchPaginated($pdo, $limit, $offset) {
+        $sql = "SELECT * FROM events ORDER BY id LIMIT :limit OFFSET :offset";
     
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':limit', $limit);
@@ -32,26 +14,21 @@ class Wrestler {
         
         $results = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $results[] = new Wrestler($pdo, $row);
+            $results[] = new Event($pdo, $row);
         }
         
         return $results;
     }
 
-    public static function countAll($pdo, $withDuo) {
-        if ($withDuo) {
-            $sql = "SELECT COUNT(*) FROM wrestlers";
-        } else {
-            $sql = "SELECT COUNT(*) FROM wrestlers WHERE name NOT ILIKE '%&%'";
-        }
-    
+    public static function countAll($pdo) {
+        $sql = "SELECT COUNT(*) FROM events";
         $stmt = $pdo->query($sql);
         return (int)$stmt->fetchColumn();
     }
 
-    public static function findWithPagination($pdo, $criteres, $withDuo, $limit, $offset) {
+    public static function findWithPagination($pdo, $criteres, $limit, $offset) {
         // Base de la requête
-        $sql = $withDuo ? "SELECT * FROM wrestlers" : "SELECT * FROM wrestlers WHERE name NOT ILIKE '%&%'";
+        $sql = "SELECT * FROM events WHERE ";
         
         $where = [];
         $params = [];
@@ -69,7 +46,6 @@ class Wrestler {
             }
 
             // Ajout des conditions à la requête
-            $sql .= $withDuo ? " WHERE " : " AND ";
             $sql .= implode(' AND ', $where);
         }
         
@@ -90,7 +66,7 @@ class Wrestler {
             $results = [];
             
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $results[] = new Wrestler($pdo, $row);
+                $results[] = new Event($pdo, $row);
             }
             
             return $results;
@@ -99,14 +75,14 @@ class Wrestler {
         }
     }
     
-    public static function countWithFilters($pdo, $criteres, $withDuo) {
-        $sql = $withDuo ? "SELECT COUNT(*) FROM wrestlers" : "SELECT COUNT(*) FROM wrestlers WHERE name NOT ILIKE '%&%'";
+    public static function countWithFilters($pdo, $criteres) {
+        $sql = "SELECT COUNT(*) FROM events";
         
         $params = [];
         $where = [];
 
         if (!empty($criteres)) {
-            $sql .= $withDuo ? " WHERE " : " AND ";
+            $sql .= " WHERE ";
 
             foreach ($criteres as $critere => $valeur) {
                 if ($critere === 'name') {
@@ -148,16 +124,16 @@ class Wrestler {
 
     public function fetch($id) {
         if ($id) {
-            $sql = "SELECT * FROM wrestlers WHERE id = :id";
+            $sql = "SELECT * FROM events WHERE id = :id";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindValue(":id", $id);
             $stmt->execute();
-            $wrestler = $stmt->fetch(PDO::FETCH_ASSOC);
+            $event = $stmt->fetch(PDO::FETCH_ASSOC);
             
-            if ($wrestler) {
-                $this->hydrate($wrestler);
+            if ($event) {
+                $this->hydrate($event);
             } else {
-                throw new Exception("Wrestler not found");
+                throw new Exception("Event not found");
             }
         } else {
             throw new Exception("Error: ID is required");
@@ -168,7 +144,7 @@ class Wrestler {
         try {
             $this->pdo->beginTransaction();
 
-            $sql = "INSERT INTO wrestlers (name) VALUES (:name) RETURNING id";
+            $sql = "INSERT INTO events (name) VALUES (:name) RETURNING id";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindValue(":name", $this->name);
             $stmt->execute();
@@ -187,7 +163,7 @@ class Wrestler {
         try {
             $this->pdo->beginTransaction();
 
-            $sql = "UPDATE wrestlers SET name = :name WHERE id = :id";
+            $sql = "UPDATE events SET name = :name WHERE id = :id";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindValue(":name", $this->name);
             $stmt->bindValue(":id", $this->id);
@@ -204,7 +180,7 @@ class Wrestler {
         try {
             $this->pdo->beginTransaction();
 
-            $sql = "DELETE FROM wrestlers WHERE id = :id";
+            $sql = "DELETE FROM events WHERE id = :id";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindValue(":id", $this->id);
             $stmt->execute();
