@@ -11,7 +11,7 @@ model Promotion {
     id   Int     @id @default(autoincrement())
     name String? @db.Text
 
-    @@map("Promotions")
+    @@map("promotions")
 }
 
 model Table {
@@ -19,7 +19,7 @@ model Table {
     html String? @db.Text
     url  String? @db.Text
 
-    @@map("Tables")
+    @@map("tables")
 }
 
 model Card {
@@ -33,25 +33,25 @@ model Card {
     info_html    String?   @db.Text
     match_html   String?   @db.Text
 
-    @@map("Cards")
+    @@map("cards")
 }
 
 model Location {
     id   Int     @id @default(autoincrement())
     name String? @db.Text
 
-    @@map("Locations")
+    @@map("locations")
 }
 
 model Event {
     id   Int     @id @default(autoincrement())
     name String? @db.Text
 
-    @@map("Events")
+    @@map("events")
 }
 
 model Match {
-    id           Int     @id @default(autoincrement())
+    id           Int    @id @default(autoincrement())
     card_id      Int?
     winner_id    String?
     win_type     String?
@@ -61,34 +61,34 @@ model Match {
     title_id     String?
     title_change Int?
 
-    @@map("Matches")
+    @@map("matches")
 }
 
 model Belt {
     id   Int     @id @default(autoincrement())
     name String? @db.Text
 
-    @@map("Belts")
+    @@map("belts")
 }
 
 model Wrestler {
     id   Int     @id @default(autoincrement())
     name String? @db.Text
 
-    @@map("Wrestlers")
+    @@map("wrestlers")
 }
 
 model MatchType {
     id   Int     @id @default(autoincrement())
     name String? @db.Text
 
-    @@map("Match_Types")
+    @@map("match_types")
 }
 
 model User {
     id       Int     @id @default(autoincrement())
-    username String @db.VarChar(255) @unique
-    password String @db.VarChar(255)
+    username String  @db.VarChar(255) @unique
+    password String  @db.VarChar(255)
 
     @@map("users")
 }
