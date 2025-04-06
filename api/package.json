@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "API du site de catch",
   "author": "FC Catch",
-  "main": "./src/index.ts",
+  "main": "./index.ts",
   "scripts": {
     "test": "jest",
-    "dev": "nodemon --exec ts-node ./src/index.ts",
-    "build": "tsc ./src/index.ts"
+    "dev": "nodemon --exec ts-node ./index.ts",
+    "build": "tsc ./index.ts"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
