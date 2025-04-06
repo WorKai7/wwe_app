@@ -24,7 +24,7 @@ class WrestlingMatch {
                 FROM matches m
                 INNER JOIN wrestlers w ON m.winner_id = w.id
                 INNER JOIN wrestlers w2 ON m.loser_id = w2.id
-                INNER JOIN match_types t ON m.match_type_id = t.id::text
+                INNER JOIN match_types t ON m.match_type_id = t.id
                 WHERE m.id > :last_id
                 ORDER BY m.id LIMIT :limit";
         
@@ -70,7 +70,7 @@ class WrestlingMatch {
             
             // Filtre par type de match
             if (!empty($filters['match_type_name'])) {
-                $sql .= " INNER JOIN match_types mt ON mt.id::text = m.match_type_id";
+                $sql .= " INNER JOIN match_types mt ON mt.id = m.match_type_id";
                 $whereClauses[] = "mt.name ILIKE :match_type_name";
                 $params[':match_type_name'] = '%' . $filters['match_type_name'] . '%';
             }
@@ -101,7 +101,7 @@ class WrestlingMatch {
                 FROM matches m
                 INNER JOIN wrestlers w ON w.id = m.winner_id
                 INNER JOIN wrestlers w2 ON w2.id = m.loser_id
-                INNER JOIN match_types mt ON mt.id::text = m.match_type_id";
+                INNER JOIN match_types mt ON mt.id = m.match_type_id";
         
         $params = [];
         $where = [];
@@ -169,7 +169,7 @@ class WrestlingMatch {
                 FROM matches m
                 INNER JOIN wrestlers w ON w.id = m.winner_id
                 INNER JOIN wrestlers w2 ON w2.id = m.loser_id
-                INNER JOIN match_types mt ON mt.id::text = m.match_type_id";
+                INNER JOIN match_types mt ON mt.id = m.match_type_id";
         
         $params = [];
         $where = [];

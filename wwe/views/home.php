@@ -219,7 +219,7 @@
 <body>
     <div class="banner_container">
         <div class="banner">
-            <nav class="container-fluid d-flex justify-content-between align-items-center p-3 ps-5 pe-5"
+            <nav class="container-fluid d-flex justify-content-between align-items-center p-3 ps-5 pe-5">
                 <a href="/wwe">
                     <img src="img/logo.png" alt="Logo" id="logo" class="img-fluid">
                 </a>

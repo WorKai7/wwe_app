@@ -20,6 +20,7 @@ try {
 
         unset($filters["confirm_envoyer"]);
         unset($filters["page"]);
+        unset($filters["with_teams"]);
 
 
         foreach ($filters as $key => $val) {

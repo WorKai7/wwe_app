@@ -1,34 +1,5 @@
 <?php
 include __DIR__."/../inc/header.php";
-<<<<<<< HEAD
-
-if (!$db instanceof PDO) {
-    die("Erreur de connexion à la base de données.");
-}
-
-$min_matches = 1000;
-if (isset($_GET['min_matches']) && is_numeric($_GET['min_matches'])) {
-    $min_matches = max(1, (int)$_GET['min_matches']);
-}
-
-$sql = "SELECT 
-            nom, 
-            victoires, 
-            defaites, 
-            (victoires + defaites) as total_matches,
-            ROUND((victoires * 100.0 / (victoires + defaites)), 2) as winrate 
-        FROM wrestlers_matches 
-        WHERE (victoires + defaites) >= :min_matches 
-        ORDER BY winrate DESC 
-        LIMIT 20";
-
-$stmt = $db->prepare($sql);
-$stmt->bindParam(':min_matches', $min_matches, PDO::PARAM_INT);
-$stmt->execute();
-$best_winrates = $stmt->fetchAll(PDO::FETCH_ASSOC);
-?>
-
-=======
 ?>
 
 <style>
@@ -42,7 +13,6 @@ $best_winrates = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </style>
 
 <!-- CLASSEMENT WINRATE -->
->>>>>>> b296f94be7cacd5e66a21231276ed5167dd2d886
 <div class="container">
 
     <h2 class="mt-4">Classement par Winrate</h2>
@@ -62,28 +32,11 @@ $best_winrates = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </form>
 
     <?php if (!empty($best_winrates)): ?>
-<<<<<<< HEAD
         <div class="table-responsive">
             <table class="table table-striped table-hover">
                 <thead class="thead-dark">
-=======
-        <table class="table table-striped table-hover">
-            <thead class="thead-dark">
-                <tr>
-                    <th>#</th>
-                    <th>Catcheur</th>
-                    <th>Victoires</th>
-                    <th>Défaites</th>
-                    <th>Total matchs</th>
-                    <th>Winrate (%)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php $rang = 1; ?>
-                <?php foreach ($best_winrates as $wrestler): ?>
->>>>>>> b296f94be7cacd5e66a21231276ed5167dd2d886
                     <tr>
-                        <th>Rang</th>
+                        <th>#</th>
                         <th>Catcheur</th>
                         <th>Victoires</th>
                         <th>Défaites</th>
@@ -135,7 +88,7 @@ $best_winrates = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <table class="table table-striped table-hover">
                 <thead class="thead-dark">
                     <tr>
-                        <th>Rang</th>
+                        <th>#</th>
                         <th>Catcheur</th>
                         <th>Victoires</th>
                         <th>Défaites</th>
