@@ -1,38 +1,23 @@
 <?php
 include __DIR__."/../inc/header.php";
-
-if (!$db instanceof PDO) {
-    die("Erreur de connexion à la base de données.");
-}
-
-$min_matches = 100;
-if (isset($_GET['min_matches']) && is_numeric($_GET['min_matches'])) {
-    $min_matches = max(1, (int)$_GET['min_matches']);
-}
-
-$sql = "SELECT 
-            nom, 
-            victoires, 
-            defaites, 
-            (victoires + defaites) as total_matches,
-            ROUND((victoires * 100.0 / (victoires + defaites)), 2) as winrate 
-        FROM wrestlers_matches 
-        WHERE (victoires + defaites) >= :min_matches 
-        ORDER BY winrate DESC 
-        LIMIT 20";
-
-$stmt = $db->prepare($sql);
-$stmt->bindParam(':min_matches', $min_matches, PDO::PARAM_INT);
-$stmt->execute();
-$best_winrates = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
+<style>
+    tr th:nth-child(4) {
+        display: none;
+    }
+
+    tr td:nth-child(4) {
+        display: none;
+    }
+</style>
 
 <!-- CLASSEMENT WINRATE -->
 <div class="container">
 
     <form method="get" class="mb-4">
         <div class="form-group">
-            <label>Nombre minimum de matchs disputés :</label>
+            <label class="mt-3">Nombre minimum de matchs disputés :</label>
             <input type="number" 
                    name="min_matches" 
                    class="form-control" 
@@ -48,7 +33,7 @@ $best_winrates = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <table class="table table-striped table-hover">
             <thead class="thead-dark">
                 <tr>
-                    <th>Rang</th>
+                    <th>#</th>
                     <th>Catcheur</th>
                     <th>Victoires</th>
                     <th>Défaites</th>

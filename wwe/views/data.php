@@ -12,6 +12,8 @@ include __DIR__.'/../inc/header.php';
     .presentation {
         width: 75vh;
         text-align: justify;
+        color: black;
+        padding: 5%;
     }
 
     .pres_container {
@@ -24,6 +26,25 @@ include __DIR__.'/../inc/header.php';
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+
+    @media (max-width: 991px) {
+        .nav {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tabs {
+            width: 100%;
+        }
+
+        tr td:last-child {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            padding: 10px;
+        }
     }
 </style>
 

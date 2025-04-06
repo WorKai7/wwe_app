@@ -119,19 +119,116 @@
             font-weight: bold;
             text-align: justify;
         }
+
+        .navbar-toggler {
+            border: none;
+            padding: 0.5rem;
+        }
+        
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+        
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='white' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+        
+        .mobile-menu {
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-menu.show {
+            transform: translateX(0);
+        }
+        
+        .mobile-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            align-items: center;
+        }
+        
+        .close-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 30px;
+            background: none;
+            border: none;
+        }
+        
+        @media (min-width: 992px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 991px) {
+            .desktop-nav {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .overflow-image {
+                display: none;
+            }
+
+            .pres_div {
+                width: 100%;
+                margin: 0;
+                padding: 5%;
+            }
+
+            .banner {
+                height: 100%;
+            }
+
+            .dropdown {
+                width: 25%;
+            }
+
+            ul {
+                list-style: none;
+            }
+
+            li:last-child {
+                display: flex;
+                justify-content: center;
+            }
+        }
+
     </style>
 </head>
 <body>
     <div class="banner_container">
         <div class="banner">
-            <nav>
-                <div>
-                    <a href="/wwe">
-                        <img src="img/logo.png" alt="Logo" id="logo">
-                    </a>
-                </div>
-
-                <div>
+            <nav class="container-fluid d-flex justify-content-between align-items-center p-3 ps-5 pe-5"
+                <a href="/wwe">
+                    <img src="img/logo.png" alt="Logo" id="logo" class="img-fluid">
+                </a>
+                
+                <button class="navbar-toggler mobile-menu-btn d-lg-none" type="button" id="mobileMenuButton">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="desktop-nav d-none d-lg-block">
                     <ul class="nav">
                         <li class="nav-item">
                             <a class="nav-link" href="/wwe">ACCUEIL</a>
@@ -147,16 +244,14 @@
                         </li>
                         <li class="nav-item">
                             <div class="dropdown">
-                                <!-- L'image comme bouton dropdown -->
                                 <img src="img/acc.png"
                                     id="acc"
-                                    class="dropdown-toggle-img"
+                                    class="dropdown-toggle-img img-fluid"
                                     height="50"
                                     data-bs-toggle="dropdown"
                                     aria-expanded="false"
                                     alt="Menu utilisateur">
 
-                                <!-- Menu dropdown -->
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><h6 class="dropdown-header">Connecté en tant que</h6></li>
                                     <li><span class="dropdown-item-text"><?= $_SESSION['user']['username'] ?? 'Utilisateur' ?></span></li>
@@ -172,6 +267,47 @@
                     </ul>
                 </div>
             </nav>
+
+            <div class="mobile-menu" id="mobileMenu">
+                <button class="close-menu" id="closeMenuButton">&times;</button>
+                
+                <ul class="mobile-nav">
+                    <li>
+                        <a class="nav-link" href="/wwe">ACCUEIL</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="/wwe/data">DONNÉES</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="/wwe/stats">STATISTIQUES</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="/wwe/analysis">ANALYSE</a>
+                    </li>
+                    <li>
+                        <div class="dropdown">
+                            <img src="img/acc.png"
+                                id="acc-mobile"
+                                class="dropdown-toggle-img img-fluid"
+                                height="50"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                alt="Menu utilisateur">
+
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><h6 class="dropdown-header">Connecté en tant que</h6></li>
+                                <li><span class="dropdown-item-text"><?= $_SESSION['user']['username'] ?? 'Utilisateur' ?></span></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item text-danger" href="delog.php">
+                                        <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
             
             <div class="pres_div">
                 <p class="presentation">
@@ -193,5 +329,14 @@
         </div>
     </div>
     <img src="img/home.jpeg" class="overflow-image">
+    <script>
+        document.getElementById('mobileMenuButton').addEventListener('click', function() {
+            document.getElementById('mobileMenu').classList.add('show');
+        });
+        
+        document.getElementById('closeMenuButton').addEventListener('click', function() {
+            document.getElementById('mobileMenu').classList.remove('show');
+        });
+    </script>
 </body>
 </html>
