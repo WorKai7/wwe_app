@@ -58,7 +58,11 @@ if (is_array($_SESSION['mesgs']) && is_array($_SESSION['mesgs']['errors'])) {
   <i class="fab fa-pinterest-p w3-hover-opacity" aria-hidden="true"></i>
   <i class="fab fa-twitter w3-hover-opacity" aria-hidden="true"></i>
   <i class="fab fa-linkedin w3-hover-opacity" aria-hidden="true"></i>
-  <p class="w3-medium">Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+</footer>
+
+<footer class="text-center mt-4">
+    <!-- Supprimer ou commenter la ligne suivante -->
+    <!-- <p>Powered by ww3</p> -->
 </footer>
 
 </body>
