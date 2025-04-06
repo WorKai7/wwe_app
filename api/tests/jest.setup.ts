@@ -1,8 +1,9 @@
 process.env.API_PORT = "2022";
+process.env.API_HOST = "localhost";
 
 import { PrismaClient } from '@prisma/client';
 import { mockDeep, mockReset, DeepMockProxy } from 'jest-mock-extended';
-import { closeServer } from '../src/index';
+import { closeServer } from '../index';
 import prisma from '../src/client';
 
 // Mock de PrismaClient

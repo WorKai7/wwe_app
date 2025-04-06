@@ -1,5 +1,5 @@
 import request from "supertest";
-import { app } from "../src/index";
+import { app } from "../index";
 import { prismaMock } from "./jest.setup";
 
 const mockedMatchType = {
