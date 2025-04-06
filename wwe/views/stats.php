@@ -5,7 +5,7 @@ if (!$db instanceof PDO) {
     die("Erreur de connexion à la base de données.");
 }
 
-$min_matches = 100;
+$min_matches = 1000;
 if (isset($_GET['min_matches']) && is_numeric($_GET['min_matches'])) {
     $min_matches = max(1, (int)$_GET['min_matches']);
 }
@@ -27,8 +27,10 @@ $stmt->execute();
 $best_winrates = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<!-- CLASSEMENT WINRATE -->
 <div class="container">
+
+    <h2 class="mt-4">Classement par Winrate</h2>
+    <hr>
 
     <form method="get" class="mb-4">
         <div class="form-group">
@@ -43,62 +45,119 @@ $best_winrates = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <button type="submit" class="btn btn-primary mt-2">Filtrer</button>
     </form>
 
-
     <?php if (!empty($best_winrates)): ?>
-        <table class="table table-striped table-hover">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Rang</th>
-                    <th>Catcheur</th>
-                    <th>Victoires</th>
-                    <th>Défaites</th>
-                    <th>Total matchs</th>
-                    <th>Winrate (%)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php $rang = 1; ?>
-                <?php foreach ($best_winrates as $wrestler): ?>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
                     <tr>
-                        <td><?= $rang++ ?></td>
-                        <td><?= htmlspecialchars($wrestler['nom']) ?></td>
-                        <td><?= $wrestler['victoires'] ?></td>
-                        <td><?= $wrestler['defaites'] ?></td>
-                        <td><?= $wrestler['total_matches'] ?></td>
-                        <td><?= number_format($wrestler['winrate'], 2) ?></td>
+                        <th>Rang</th>
+                        <th>Catcheur</th>
+                        <th>Victoires</th>
+                        <th>Défaites</th>
+                        <th>Total matchs</th>
+                        <th>Winrate (%)</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php $rang = 1; ?>
+                    <?php foreach ($best_winrates as $wrestler): ?>
+                        <tr>
+                            <td><?= $rang++ ?></td>
+                            <td><?= htmlspecialchars($wrestler['nom']) ?></td>
+                            <td><?= $wrestler['victoires'] ?></td>
+                            <td><?= $wrestler['defaites'] ?></td>
+                            <td><?= $wrestler['total_matches'] ?></td>
+                            <td><?= number_format($wrestler['winrate'], 2) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
     <?php else: ?>
         <div class="alert alert-info">Aucun catcheur trouvé avec ces critères</div>
     <?php endif; ?>
+
+    <hr class="my-5">
+    <h2>Classement par total de matchs joués</h2>
+
+    <?php
+    $sql_total = "SELECT 
+                      nom, 
+                      victoires, 
+                      defaites, 
+                      (victoires + defaites) as total_matches,
+                      ROUND((victoires * 100.0 / (victoires + defaites)), 2) as winrate 
+                  FROM wrestlers_matches 
+                  WHERE (victoires + defaites) >= :min_matches 
+                  ORDER BY total_matches DESC 
+                  LIMIT 20";
+    $stmt_total = $db->prepare($sql_total);
+    $stmt_total->bindParam(':min_matches', $min_matches, PDO::PARAM_INT);
+    $stmt_total->execute();
+    $best_totals = $stmt_total->fetchAll(PDO::FETCH_ASSOC);
+    ?>
+
+    <?php if (!empty($best_totals)): ?>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Rang</th>
+                        <th>Catcheur</th>
+                        <th>Victoires</th>
+                        <th>Défaites</th>
+                        <th>Total matchs</th>
+                        <th>Winrate (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $rang = 1; ?>
+                    <?php foreach ($best_totals as $wrestler): ?>
+                        <tr>
+                            <td><?= $rang++ ?></td>
+                            <td><?= htmlspecialchars($wrestler['nom']) ?></td>
+                            <td><?= $wrestler['victoires'] ?></td>
+                            <td><?= $wrestler['defaites'] ?></td>
+                            <td><?= $wrestler['total_matches'] ?></td>
+                            <td><?= number_format($wrestler['winrate'], 2) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php else: ?>
+        <div class="alert alert-info">Aucun catcheur trouvé pour ce classement</div>
+    <?php endif; ?>
+
+    <hr class="my-5">
+
+    <h2>Emplacements des matchs (+ 5000 matchs)</h2>
+
+    <?php
+    $sql_locations = "SELECT l.name AS location, COUNT(*) AS count 
+                      FROM matches m
+                      JOIN cards c ON m.card_id = c.id
+                      JOIN locations l ON c.location_id = l.id
+                      GROUP BY l.name
+                      HAVING COUNT(*) > 5000
+                      ORDER BY count DESC";
+    $stmt_locations = $db->prepare($sql_locations);
+    $stmt_locations->execute();
+    $locations = $stmt_locations->fetchAll(PDO::FETCH_ASSOC);
+
+    $locationLabels = [];
+    $locationCounts = [];
+    foreach ($locations as $loc) {
+        $locationLabels[] = $loc['location'];
+        $locationCounts[] = $loc['count'];
+    }
+    ?>
+
+    <div class="mt-4" style="max-width: 800px; margin: auto;">
+        <canvas id="locationsChart" width="800" height="800"></canvas>
+    </div>
 </div>
 
-
-<!-- EMPLACEMENT DES MATCHS -->
-<?php
-$sql_locations = "SELECT l.name AS location, COUNT(*) AS count 
-                  FROM matches m
-                  JOIN cards c ON m.card_id = c.id
-                  JOIN locations l ON c.location_id = l.id
-                  GROUP BY l.name
-                  ORDER BY count DESC";
-$stmt_locations = $db->prepare($sql_locations);
-$stmt_locations->execute();
-$locations = $stmt_locations->fetchAll(PDO::FETCH_ASSOC);
-
-$locationLabels = [];
-$locationCounts = [];
-foreach ($locations as $loc) {
-    $locationLabels[] = $loc['location'];
-    $locationCounts[] = $loc['count'];
-}
-?>
-
-<div class="container mt-5">
-    <canvas id="locationsChart"></canvas>
-</div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const ctx = document.getElementById('locationsChart').getContext('2d');
@@ -116,7 +175,6 @@ foreach ($locations as $loc) {
                     'rgba(75, 192, 192, 0.2)',
                     'rgba(153, 102, 255, 0.2)',
                     'rgba(255, 159, 64, 0.2)'
-                    // background
                 ],
                 borderColor: [
                     'rgba(255, 99, 132, 1)',
@@ -125,7 +183,6 @@ foreach ($locations as $loc) {
                     'rgba(75, 192, 192, 1)',
                     'rgba(153, 102, 255, 1)',
                     'rgba(255, 159, 64, 1)'
-                    // foreground
                 ],
                 borderWidth: 1
             }]
