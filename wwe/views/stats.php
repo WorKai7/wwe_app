@@ -1,5 +1,6 @@
 <?php
 include __DIR__."/../inc/header.php";
+<<<<<<< HEAD
 
 if (!$db instanceof PDO) {
     die("Erreur de connexion à la base de données.");
@@ -27,6 +28,21 @@ $stmt->execute();
 $best_winrates = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
+=======
+?>
+
+<style>
+    tr th:nth-child(4) {
+        display: none;
+    }
+
+    tr td:nth-child(4) {
+        display: none;
+    }
+</style>
+
+<!-- CLASSEMENT WINRATE -->
+>>>>>>> b296f94be7cacd5e66a21231276ed5167dd2d886
 <div class="container">
 
     <h2 class="mt-4">Classement par Winrate</h2>
@@ -34,7 +50,7 @@ $best_winrates = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <form method="get" class="mb-4">
         <div class="form-group">
-            <label>Nombre minimum de matchs disputés :</label>
+            <label class="mt-3">Nombre minimum de matchs disputés :</label>
             <input type="number" 
                    name="min_matches" 
                    class="form-control" 
@@ -46,9 +62,26 @@ $best_winrates = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </form>
 
     <?php if (!empty($best_winrates)): ?>
+<<<<<<< HEAD
         <div class="table-responsive">
             <table class="table table-striped table-hover">
                 <thead class="thead-dark">
+=======
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Catcheur</th>
+                    <th>Victoires</th>
+                    <th>Défaites</th>
+                    <th>Total matchs</th>
+                    <th>Winrate (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $rang = 1; ?>
+                <?php foreach ($best_winrates as $wrestler): ?>
+>>>>>>> b296f94be7cacd5e66a21231276ed5167dd2d886
                     <tr>
                         <th>Rang</th>
                         <th>Catcheur</th>

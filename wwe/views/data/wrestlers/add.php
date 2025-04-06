@@ -30,7 +30,7 @@ include __DIR__.'/../../data.php';
         unset($_SESSION['mesgs']['errors']);
     }
     ?>
-    <div class="card">
+    <div class="card m-3" style="width: 75%;">
         <div class="card-header">
             <h3 class="mb-0">Ajouter un catcheur / équipe</h3>
         </div>

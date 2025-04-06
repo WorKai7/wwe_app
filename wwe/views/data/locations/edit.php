@@ -26,7 +26,7 @@ include __DIR__.'/../../data.php';
         <?php unset($_SESSION['mesgs']['errors']); ?>
     <?php endif; ?>
     
-    <div class="card">
+    <div class="card m-3" style="width: 75%;">
         <div class="card-header">
             <h3 class="mb-0">Modifier un lieu</h3>
         </div>
